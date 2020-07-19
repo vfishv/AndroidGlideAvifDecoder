@@ -34,19 +34,6 @@ class AvifDecoderFromByteBuffer : ResourceDecoder<ByteBuffer, Bitmap> {
         }
     }
 
-    private fun isAvif(buf: ByteBuffer): Boolean {
-        try {
-            while (buf.hasRemaining()) {
-                val box = HeaderBox(buf)
-                if (box.type.contentEquals(HeaderBox.ftyp)) {
-                    return box.data.take(4).toByteArray().contentEquals(HeaderBox.avif)
-                }
-            }
-        } catch (e: Throwable) {
-        }
-        return false
-    }
-
     private external fun decodeAvif(
         byteBuffer: ByteBuffer,
         byteBufferLength: Int
@@ -86,6 +73,21 @@ class AvifDecoderFromByteBuffer : ResourceDecoder<ByteBuffer, Bitmap> {
             val ftyp = byteArrayOf(0x66, 0x74, 0x79, 0x70)
             val avif = byteArrayOf(0x61, 0x76, 0x69, 0x66)
             val primitives = arrayOf(ftyp)
+        }
+    }
+
+    companion object{
+        fun isAvif(buf: ByteBuffer): Boolean {
+            try {
+                while (buf.hasRemaining()) {
+                    val box = HeaderBox(buf)
+                    if (box.type.contentEquals(HeaderBox.ftyp)) {
+                        return box.data.take(4).toByteArray().contentEquals(HeaderBox.avif)
+                    }
+                }
+            } catch (e: Throwable) {
+            }
+            return false
         }
     }
 }
