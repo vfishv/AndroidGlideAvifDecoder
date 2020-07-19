@@ -7,9 +7,9 @@ apply plugin: 'maven'
 def deployTo = new File(rootDir, "repository")
 
 android {
-    ndkVersion "21.1.6352462"
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
+    ndkVersion "21.0.6113669"
 
     defaultConfig {
         minSdkVersion 16
