@@ -76,7 +76,7 @@ class AvifDecoderFromByteBuffer : ResourceDecoder<ByteBuffer, Bitmap> {
         }
     }
 
-    companion object{
+    companion object {
         fun isAvif(buf: ByteBuffer): Boolean {
             try {
                 while (buf.hasRemaining()) {
@@ -89,6 +89,25 @@ class AvifDecoderFromByteBuffer : ResourceDecoder<ByteBuffer, Bitmap> {
             }
             return false
         }
+
+        fun decode(source: ByteBuffer): Bitmap? {
+            if (!source.isDirect) {
+                throw DecodeException("Buffer must be DirectByteBuffer")
+            }
+
+            LibraryLoader
+            try {
+                val decoder = AvifDecoderFromByteBuffer()
+                val bitmap =
+                    decoder.decodeAvif(source, source.remaining())
+                        ?: throw DecodeException("avif decode failed")
+                return bitmap
+            } catch (ex: Throwable) {
+                throw IOException("Cannot load Avif from stream", ex)
+            }
+        }
     }
+
+
 }
 
