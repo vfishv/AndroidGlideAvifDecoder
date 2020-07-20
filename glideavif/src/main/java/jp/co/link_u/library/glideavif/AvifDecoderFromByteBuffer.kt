@@ -98,10 +98,8 @@ class AvifDecoderFromByteBuffer : ResourceDecoder<ByteBuffer, Bitmap> {
             LibraryLoader
             try {
                 val decoder = AvifDecoderFromByteBuffer()
-                val bitmap =
-                    decoder.decodeAvif(source, source.remaining())
-                        ?: throw DecodeException("avif decode failed")
-                return bitmap
+                return decoder.decodeAvif(source, source.remaining())
+                    ?: throw DecodeException("avif decode failed")
             } catch (ex: Throwable) {
                 throw IOException("Cannot load Avif from stream", ex)
             }
